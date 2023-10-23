@@ -1,0 +1,6 @@
+.list {
+  display: inline-block;
+}
+.listItem{
+  background-color: lightgreen;
+}
