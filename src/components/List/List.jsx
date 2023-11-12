@@ -2,6 +2,8 @@ import PropTypes from "prop-types";
 import styles from "./List.module.css";
 import Button from "../Button/Button";
 import Input from "../Input/Inpu";
+import ModalChange from "../ModalChange/ModalChange";
+import { useState } from "react";
 
 const List = ({
   items,
@@ -13,70 +15,129 @@ const List = ({
   changeInputEditHandler,
   saveBtnHandler,
 }) => {
-  const listItem = items.map((ele, index) => (
-    <li key={index} className={ele.isDone ? `p-2 ${styles.listItem}` : "p-2"}>
-      {!ele.isEditing && ele.item}
-      {ele.isEditing && (
-        <>
-          <Input
-            value={ele.editingItem}
-            changeHandler={(data) => changeInputEditHandler(index, data)}
-          ></Input>
+  const [show, setShow] = useState(false);
+
+  const listItem = items.map((ele, index) => {
+    const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
+
+    const handleConfirm = () => {
+      deletebtnHandler(index);
+      setShow(false);
+    };
+
+    return (
+      <li
+        key={index}
+        className={ele.isDone ? `p-2 ${styles.listItem}` : "p-2"}
+        style={{
+          display: `${ele.isSearch ? "none" : "block"}`,
+          border: "1px solid black",
+          borderRadius: "5px",
+          marginTop: "10px",
+        }}
+      >
+        {!ele.isEditing && ele.item}
+        {ele.isEditing && (
+          <>
+            <Input
+              value={ele.editingItem}
+              changeHandler={(data) => changeInputEditHandler(index, data)}
+              className={styles.input}
+            ></Input>
+            <Button
+              clickHandler={() => saveBtnHandler(index)}
+              disabled={!ele.editingItem.trim().length}
+              className={
+                ele.editingItem.trim().length
+                  ? `ms-5 ${styles.buttonEnabled}`
+                  : `ms-5 ${styles.button}`
+              }
+            >
+              Save
+            </Button>
+            <Button
+              clickHandler={() => cancelBtnHandler(index)}
+              className={`ms-5 ${styles.buttonEnabled}`}
+            >
+              Cancel
+            </Button>
+          </>
+        )}
+        {!ele.isEditing && (
           <Button
-            className="ms-2"
-            clickHandler={() => saveBtnHandler(index)}
-            disabled={!ele.editingItem.trim().length}
+            clickHandler={() => {
+              editBtnHandler(index);
+            }}
+            disabled={ele.isDone}
+            className={
+              !ele.isDone
+                ? `ms-5 ${styles.buttonEnabled}`
+                : `ms-5 ${styles.button}`
+            }
           >
-            Save
+            Edit
           </Button>
-          <Button className="ms-2" clickHandler={() => cancelBtnHandler(index)}>
-            Cancel
+        )}
+        <Button
+          clickHandler={() => swapItemHandler(index, index - 1)}
+          disabled={index === 0}
+          className={
+            !(index === 0)
+              ? `ms-5 ${styles.buttonEnabled}`
+              : `ms-5 ${styles.button}`
+          }
+        >
+          UP
+        </Button>
+        <Button
+          clickHandler={() => swapItemHandler(index, index + 1)}
+          disabled={index === items.length - 1}
+          className={
+            !(index === items.length - 1)
+              ? `ms-5 ${styles.buttonEnabled}`
+              : `ms-5 ${styles.button}`
+          }
+        >
+          Down
+        </Button>
+        {!ele.isDone && (
+          <Button
+            clickHandler={() => donebtnHandler(index)}
+            disabled={ele.isEditing}
+            className={
+              !ele.isEditing
+                ? `ms-5 ${styles.buttonEnabled}`
+                : `ms-5 ${styles.button}`
+            }
+          >
+            Done
           </Button>
-        </>
-      )}
-      {!ele.isEditing && (
-        <Button
-          className="ms-2"
-          clickHandler={() => {
-            editBtnHandler(index);
-          }}
-        >
-          Edit
-        </Button>
-      )}
-      <Button
-        className="ms-2 me-2"
-        clickHandler={() => swapItemHandler(index, index - 1)}
-        disabled={index === 0}
-      >
-        UP
-      </Button>
-      <Button
-        style={{ backgroundColor: "yellow" }}
-        clickHandler={() => swapItemHandler(index, index + 1)}
-        disabled={index === items.length - 1}
-      >
-        Down
-      </Button>
-      {!ele.isDone && (
-        <Button
-          className="ms-2 me-2"
-          clickHandler={() => donebtnHandler(index)}
-          disabled={ele.isEditing}
-        >
-          Done
-        </Button>
-      )}
-      {ele.isDone && (
-        <Button
-          className="me-2 ms-2"
-          clickHandler={() => deletebtnHandler(index)}
-        >
-          Delete
-        </Button>
-      )}
-    </li>
-  ));
+        )}
+        {ele.isDone && (
+          <>
+            <Button
+              clickHandler={handleShow}
+              className={
+                !ele.isEditing
+                  ? `ms-5 ${styles.buttonEnabled}`
+                  : `ms-5 ${styles.button}`
+              }
+            >
+              Delete
+            </Button>
+            <ModalChange
+              show={show}
+              handleClose={handleClose}
+              handleConfirm={handleConfirm}
+              modalHead="Delete Task"
+              modalBody="You Wanna Delete This Task ?"
+            ></ModalChange>
+          </>
+        )}
+      </li>
+    );
+  });
 
   return <ul className={styles.list}>{listItem}</ul>;
 };

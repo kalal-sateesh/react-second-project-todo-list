@@ -1,6 +1,33 @@
 .list {
   display: inline-block;
+  list-style-type: none;
+  font-weight: bold;
 }
-.listItem{
+.input {
+  font-family: sans-serif;
+  outline: none;
+  border: 1px solid gray;
+  padding: 0.1rem 0.4rem;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+.listItem {
   background-color: lightgreen;
+}
+.button {
+  padding: 0.1rem 0.4rem;
+  padding-top: 0;
+  background-color: rgba(148, 148, 148, 0.7);
+  color: white;
+}
+.buttonEnabled {
+  padding: 0.1rem 0.4rem;
+  padding-top: 0;
+  color: #0d6dfc;
+  border: 1px solid #0d6dfc;
+}
+.buttonEnabled:hover {
+  color: white;
+  background-color: #0d6dfc;
+  border-radius: 5px;
 }

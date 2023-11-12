@@ -1,5 +1,11 @@
 import PropTypes from "prop-types";
-const Input = ({ changeHandler, value, enterKeyHandler }) => {
+const Input = ({
+  changeHandler,
+  value,
+  enterKeyHandler,
+  className,
+  placeholder,
+}) => {
   return (
     <input
       type="text"
@@ -12,6 +18,8 @@ const Input = ({ changeHandler, value, enterKeyHandler }) => {
           enterKeyHandler();
         }
       }}
+      className={className}
+      placeholder={placeholder}
     ></input>
   );
 };
@@ -20,6 +28,8 @@ Input.propTypes = {
   changeHandler: PropTypes.func,
   value: PropTypes.string,
   enterKeyHandler: PropTypes.func,
+  className: PropTypes.string,
+  placeholder: PropTypes.string,
 };
 
 export default Input;
