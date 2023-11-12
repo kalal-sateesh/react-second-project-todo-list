@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "../Button/Button";
 import Input from "../Input/Inpu";
 import List from "../List/List";
@@ -88,7 +89,11 @@ const Todo = () => {
         value={item}
         enterKeyHandler={btnClickHandler}
       />
-      <Button clickHandler={btnClickHandler} disabled={!item.trim().length}>
+      <Button
+        variant="outline-primary"
+        clickHandler={btnClickHandler}
+        disabled={!item.trim().length}
+      >
         Add To List
       </Button>
       <Button clickHandler={() => setList([])} disabled={!list.length}>
